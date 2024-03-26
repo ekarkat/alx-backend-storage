@@ -2,7 +2,7 @@
 """ Documentation """
 
 
-def schools_by_topic(mongo_collection, topics):
+def schools_by_topic(mongo_collection, topic):
     """ find function"""
 
     res = mongo_collection.find({"topics": topic})
