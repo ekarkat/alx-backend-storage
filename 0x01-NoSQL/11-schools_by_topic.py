@@ -2,8 +2,8 @@
 """ Documentation """
 
 
-def update_topics(mongo_collection, name, topics):
-    """ Update function"""
+def schools_by_topic(mongo_collection, topics):
+    """ find function"""
 
     res = mongo_collection.find({"topics": topic})
     return res
