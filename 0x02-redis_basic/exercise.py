@@ -2,8 +2,8 @@
 """ Module Documentation"""
 
 import redis
-from  uuid import uuid4
-from typing import Union
+from uuid import uuid4
+from typing import Union, Callable
 
 
 class Cache:
@@ -23,3 +23,11 @@ class Cache:
         key = str(uuid4())
         self._redis.set(key, data)
         return key
+
+    def get(self, key: str,
+            fn: Callable = None) -> Union[str, bytes, int, float]:
+        """ get data """
+        data = self._redis.get(key)
+        if fn:
+            data = fn(data)
+        return data
