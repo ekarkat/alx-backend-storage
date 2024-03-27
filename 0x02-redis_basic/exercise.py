@@ -31,3 +31,15 @@ class Cache:
         if fn:
             data = fn(data)
         return data
+
+    def get_str(self, key: str) -> str:
+        """ get data """
+        data = self._redis.get(key)
+
+        return str(data)
+
+    def get_int(self, key: str) -> int:
+        """ get data """
+        data = self._redis.get(key)
+
+        return int(data)
