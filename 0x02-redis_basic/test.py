@@ -1,19 +1,32 @@
-#!/usr/bin/env python3
-"""
-Main file
-"""
-import redis
+def my_decorator(func):
+	def wrapper(*args, **kwargs):
+		print("Before calling the function")
+		result = func(*args, **kwargs)
+		print("After calling the function")
+		print(func.__qualname__)
+		return result
+	return wrapper
 
-Cache = __import__('exercise').Cache
 
-cache = Cache()
+class MyClass:
+    def __init__(self):
+        pass
 
-TEST_CASES = {
-    b"foo": None,
-    123: int,
-    "bar": lambda d: d.decode("utf-8")
-}
 
-for value, fn in TEST_CASES.items():
-    key = cache.store(value)
-    assert cache.get(key, fn=fn) == value
+    @my_decorator
+    def my_method1(self, x, y):
+        return x + y
+
+    @my_decorator
+    def my_method2(self, x, y):
+        return x * y
+
+# Create an instance of MyClass
+obj = MyClass()
+
+# Call the decorated methods
+result1 = obj.my_method1(3, 5)
+result2 = obj.my_method2(3, 5)
+
+print("Result of my_method1:", result1)
+print("Result of my_method2:", result2)
