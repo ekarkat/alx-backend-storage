@@ -3,6 +3,8 @@
 
 Cache = __import__('exercise').Cache
 
+replay = __import__('exercise').replay
+
 cache = Cache()
 
 s1 = cache.store("first")
@@ -17,3 +19,7 @@ outputs = cache._redis.lrange("{}:outputs".format(cache.store.__qualname__), 0, 
 
 print("inputs: {}".format(inputs))
 print("outputs: {}".format(outputs))
+print(cache.get('Cache.store'))
+
+print(cache.store.__qualname__)
+replay(cache.store)

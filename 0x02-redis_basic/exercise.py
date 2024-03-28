@@ -33,7 +33,7 @@ def call_history(method: Callable) -> Callable:
         self._redis.rpush(outputs, str(result))
         return result
     return wrapper
- 
+
 
 class Cache:
     """task 0 : Cache class"""
@@ -74,3 +74,19 @@ class Cache:
         data = self._redis.get(key)
 
         return int(data)
+
+
+def replay(method: Callable) -> None:
+    """Documentation"""
+    c = redis.Redis()
+    inputs = c.lrange("Cache.store:inputs", 0, -1)
+    outputs = c.lrange("Cache.store:outputs", 0, -1)
+
+    print('{} was called {} times'.format(method.__qualname__,
+          c.get('Cache.store').decode("utf-8")))
+
+    for inp, out in zip(inputs, outputs):
+        print(
+            "{}(*{}) -> {}".format(inp.decode("utf-8"),
+                                   out.decode("utf-8"))
+        )
