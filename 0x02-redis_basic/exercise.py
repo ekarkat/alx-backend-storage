@@ -20,6 +20,21 @@ def count_calls(method: Callable) -> Callable:
     return wrapper
 
 
+def call_history(method: Callable) -> Callable:
+    """ Count the number of calls"""
+
+    @wraps(method)
+    def wrapper(self, *args, **kwargs):
+        """ the wrapper function """
+        inputs = "{}:inputs".format(method.__qualname__)
+        outputs = "{}:outputs".format(method.__qualname__)
+        result = method(self, *args, **kwargs)
+        self._redis.rpush(inputs, str(args))
+        self._redis.rpush(outputs, str(result))
+        return result
+    return wrapper
+ 
+
 class Cache:
     """task 0 : Cache class"""
 
@@ -31,6 +46,7 @@ class Cache:
         self._redis = redis.Redis()
         self._redis.flushdb()
 
+    @call_history
     @count_calls
     def store(self, data: Union[str, bytes, int, float]) -> str:
         """store the input data in Redis using the random key
